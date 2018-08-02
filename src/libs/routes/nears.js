@@ -22,7 +22,7 @@ module.exports = (app, redis) => {
             if (err) console.error(err)
             else {                
                 const keys = locations.map(l => l.key)
-                redis.hmget('current', keys, function (err, obj) {
+                redis.mget(keys, function (err, obj) {
                     if (obj === undefined){
                         res.status(500).json([])
                         return

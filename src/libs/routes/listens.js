@@ -23,8 +23,7 @@ module.exports = (app, redis) => {
         }, function (err, reply) {
             if (err) console.error(err)
             else {
-                redis.hset('current', key, JSON.stringify(current));
-                //redis.set(current.id, JSON.stringify(current))
+                redis.set(key, JSON.stringify(current), 'EX', 10 * 60)
                 res.status(200).json(current)
             }
         })
