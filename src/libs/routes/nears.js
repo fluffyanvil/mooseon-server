@@ -23,7 +23,11 @@ module.exports = (app, redis) => {
             else {                
                 const keys = locations.map(l => l.key)
                 redis.hmget('current', keys, function (err, obj) {
-                     if (obj !== undefined) res.status(500)
+                    if (obj === undefined){
+                        res.status(500).json([])
+                        return
+                    }
+                    
                     const notnull = obj.filter(o => o)
                     const arr = notnull.map(o => {
                         const r = JSON.parse(o)
