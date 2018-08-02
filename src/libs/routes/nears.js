@@ -1,4 +1,5 @@
 const path = '/near'
+const config = require('../../config')
 module.exports = (app, redis) => {
     const georedis = require('georedis').initialize(redis)
     const options = {
@@ -21,7 +22,7 @@ module.exports = (app, redis) => {
         function (err, locations) {
             if (err) console.error(err)
             else {                
-                const keys = locations.map(l => l.key)
+                const keys = locations.map(l => `${config.redis_listens_namespace}:${l.key}`)
                 redis.mget(keys, function (err, obj) {
                     if (obj === undefined){
                         res.status(500).json([])

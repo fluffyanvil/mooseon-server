@@ -4,5 +4,6 @@ config.redis_url = 'redis://h:pc18c701245d6fe96c1c0fbed36ebe4fd64e2c0777f16031de
 config.port = 3000
 
 config.current_user_locations = "CurrentUserLocations"
+config.redis_listens_namespace = 'listens'
 
 module.exports = config

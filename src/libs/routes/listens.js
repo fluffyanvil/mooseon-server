@@ -1,4 +1,5 @@
 const path = '/listen'
+const config = require('../../config')
 module.exports = (app, redis) => {
     const georedis = require('georedis').initialize(redis)
     
@@ -23,7 +24,7 @@ module.exports = (app, redis) => {
         }, function (err, reply) {
             if (err) console.error(err)
             else {
-                redis.set(key, JSON.stringify(current), 'EX', 10 * 60)
+                redis.set(`${config.redis_listens_namespace}:${key}`, JSON.stringify(current), 'EX', 10 * 60)
                 res.status(200).json(current)
             }
         })
