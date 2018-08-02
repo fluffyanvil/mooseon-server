@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 
 
 
-const httpServer = http.createServer(app).listen(config.port, function () {
+const httpServer = http.createServer(app).listen(process.env.PORT || config.port, function () {
     const host = httpServer.address().address
     const port = httpServer.address().port
     console.log('Web server started at http://%s:%s', host, port)
