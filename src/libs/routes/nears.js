@@ -13,7 +13,7 @@ module.exports = (app, redis) => {
     }
     app.get(path, (req, res) => {
         const params = req.query
-        if (params.unit) options.units = params.units
+        if (params.units) options.units = params.units
         if (params.count) options.count = params.count
 
         georedis.nearby({
