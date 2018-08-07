@@ -13,14 +13,15 @@ module.exports = (app, redis) => {
     }
     app.get(path, (req, res) => {
         const params = req.query
+        let radius = 50
         if (params.units) options.units = params.units
         if (params.count) options.count = params.count
-
+        if (params.radius) radius = params.radius
         georedis.nearby({
             latitude: params.lat ? params.lat : 31,
             longitude: params.lng ? params.lng : 51
         },
-        params.radius ? params.radius : 50,
+        radius,
         options,
         function (err, locations) {
             if (err) console.error(err)
