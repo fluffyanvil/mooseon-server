@@ -7,7 +7,7 @@ module.exports = (app, redis) => {
         withHashes: false, // Will provide a 52bit Geohash Integer, default false
         withDistances: true, // Will provide distance from query, default false
         order: 'ASC', // or 'DESC' or true (same as 'ASC'), default false
-        units: 'm', // or 'km', 'mi', 'ft', default 'm'
+        units: 'km', // or 'km', 'mi', 'ft', default 'm'
         count: 100, // Number of results to return, default undefined
         accurate: true // Useful if in emulated mode and accuracy is important, default false
     }
@@ -20,7 +20,7 @@ module.exports = (app, redis) => {
             latitude: params.lat ? params.lat : 31,
             longitude: params.lng ? params.lng : 51
         },
-        params.radius ? params.radius : 1000,
+        params.radius ? params.radius : 50,
         options,
         function (err, locations) {
             if (err) console.error(err)
