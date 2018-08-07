@@ -9,15 +9,18 @@ module.exports = (app, redis) => {
         order: 'ASC', // or 'DESC' or true (same as 'ASC'), default false
         units: 'm', // or 'km', 'mi', 'ft', default 'm'
         count: 100, // Number of results to return, default undefined
-        accurate: false // Useful if in emulated mode and accuracy is important, default false
+        accurate: true // Useful if in emulated mode and accuracy is important, default false
     }
     app.get(path, (req, res) => {
         const params = req.query
+        if (params.unit) options.units = params.units
+        if (params.count) options.count = params.count
+
         georedis.nearby({
-            latitude: params.lat,
-            longitude: params.lng
+            latitude: params.lat ? params.lat : 31,
+            longitude: params.lng ? params.lng : 51
         },
-        params.radius,
+        params.radius ? params.radius : 1000,
         options,
         function (err, locations) {
             if (err) console.error(err)

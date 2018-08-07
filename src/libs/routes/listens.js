@@ -7,9 +7,9 @@ module.exports = (app, redis) => {
     expected body
 
     {
-        user: string,
-        lng: Number,
-        lat: Number,
+        "user": string,
+        "lng": Number,
+        "lat": Number,
         "artist": "Пневмослон",
         "track": "Ебаный Серега"
     }
@@ -17,6 +17,15 @@ module.exports = (app, redis) => {
     */
     app.post(path, (req, res) => {    
         const current = req.body
+
+        if (!current.hasOwnProperty('user'))
+        {
+            res.status(500).json({
+                error: 'body json invalid'
+            })
+            return
+        }
+        
         const key = current.user
         georedis.addLocation(key, {
             latitude: current.lat,
