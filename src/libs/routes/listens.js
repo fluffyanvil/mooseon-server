@@ -1,6 +1,7 @@
 const path = '/listen'
 const config = require('../../config')
-module.exports = (app, redis) => {
+const listen = require('../utils/validation/listen')
+module.exports = (app, redis, validation) => {
     const georedis = require('georedis').initialize(redis)
     
     /*
@@ -15,7 +16,7 @@ module.exports = (app, redis) => {
     }
     
     */
-    app.post(path, (req, res) => {    
+    app.post(path, validation(listen), (req, res) => {    
         const current = req.body
 
         if (!current.hasOwnProperty('user'))

@@ -1,5 +1,6 @@
 const config = require('../config')
 const express = require('express')
+const validation = require('express-validation')
 const cors = require('cors')
 const app = express()
 const http = require('http')
@@ -13,7 +14,9 @@ app.use((req, res, next) => {
     next();
 })
 
-
+app.use(function(err, req, res, next){
+    res.status(500).json(err);
+  });
 
 const httpServer = http.createServer(app).listen(process.env.PORT || config.port, function () {
     const host = httpServer.address().address
@@ -22,5 +25,5 @@ const httpServer = http.createServer(app).listen(process.env.PORT || config.port
 });
 
 module.exports = (redis) => {
-    require('./routes')(app, redis)
+    require('./routes')(app, redis, validation)
 }
