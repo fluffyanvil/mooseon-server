@@ -1,6 +1,7 @@
 const path = '/near'
 const config = require('../../config')
-module.exports = (app, redis) => {
+const near = require('../utils/validation/near')
+module.exports = (app, redis, validation) => {
     const georedis = require('georedis').initialize(redis)
     const options = {
         withCoordinates: true, // Will provide coordinates with locations, default false
@@ -11,17 +12,16 @@ module.exports = (app, redis) => {
         count: 100, // Number of results to return, default undefined
         accurate: true // Useful if in emulated mode and accuracy is important, default false
     }
-    app.get(path, (req, res) => {
+    app.get(path, validation(near), (req, res) => {
         const params = req.query
-        let radius = 50
         if (params.units) options.units = params.units
         if (params.count) options.count = params.count
-        if (params.radius) radius = params.radius
+        
         georedis.nearby({
-            latitude: params.lat ? params.lat : 31,
-            longitude: params.lng ? params.lng : 51
+            latitude: params.lat,
+            longitude: params.lng
         },
-        radius,
+        params.radius,
         options,
         function (err, locations) {
             if (err) console.error(err)

@@ -14,9 +14,15 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(function(err, req, res, next){
-    res.status(500).json(err);
-  });
+// error handler
+app.use(function (err, req, res, next) {
+    if (err instanceof validation.ValidationError) return res.status(err.status).json(err);
+    if (process.env.NODE_ENV !== 'production') {
+        return res.status(500).send(err.stack);
+    } else {
+        return res.status(500);
+    }
+});
 
 const httpServer = http.createServer(app).listen(process.env.PORT || config.port, function () {
     const host = httpServer.address().address
